@@ -11,6 +11,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="6dp"
+        app:cardBackgroundColor="@color/background"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#3A3A3A"
+            android:background="@drawable/back2"
             android:orientation="vertical"
             android:padding="7dp">
 
@@ -28,7 +30,7 @@
                 android:id="@+id/textViewGameName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#3A3A3A"
+                android:background="@drawable/back2"
                 android:padding="3pt"
                 android:textColor="@color/background"
                 android:textSize="24sp" />

@@ -23,7 +23,6 @@ public class FlipAnimation implements Animation.AnimationListener {
         this.txt = txt;
         this.ctx = ctx;
         isBackOfCardShowing = f;
-        //this.card = card;
         this.s1 = s1;
         this.s2 = s2;
         flipped = (FlipEnd) ctx;

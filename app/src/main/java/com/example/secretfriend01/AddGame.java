@@ -3,18 +3,11 @@ package com.example.secretfriend01;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.example.secretfriend01.databinding.ActivityAddGameBinding;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +20,7 @@ public class AddGame extends AppCompatActivity {
     public String groupName;
     public Integer groupCount;
     private ArrayList<String> players = new ArrayList<String>();
+    private ArrayList<String> games_names = new ArrayList<>();
     private HashMap<String,String> pool = new HashMap<String,String>();
     private int i=0,j=0;
 
@@ -35,6 +29,9 @@ public class AddGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddGameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Bundle b = this.getIntent().getBundleExtra("bundle");
+        games_names = b.getStringArrayList("names");
+        System.out.println(games_names);
         binding.closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,8 +42,11 @@ public class AddGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 groupName = binding.groupNameTxt.getText().toString();
-                if (!(groupName.equals(""))){
+                if (!(groupName.equals("")) && !games_names.contains(groupName)){
                     updateFragment();
+                }
+                else if(games_names.contains(groupName)){
+                    binding.groupNameTxt.setError("Данное имя уже занято!");
                 }
                 else{
                     binding.groupNameTxt.setError("Необходимо заполнить!");

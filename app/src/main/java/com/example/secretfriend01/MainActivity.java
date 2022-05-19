@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.secretfriend01.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,6 +27,7 @@ import room.Game;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private ArrayList<String> games_names = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddGame.class);
+                Bundle b = new Bundle();
+                b.putStringArrayList("names",games_names);
+                intent.putExtra("bundle",b);
                 startActivity(intent);
             }
         });
@@ -52,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(new Consumer<List<Game>>() {
                     @Override
                     public void accept(List<Game> games) throws Exception {
+                        for (int i=0;i<games.size();i++){
+                            games_names.add(games.get(i).getGameName());
+                        }
                         GameAdapter adapter = new GameAdapter(MainActivity.this,games);
                         binding.recyclerviewGames.setAdapter(adapter);
                     }

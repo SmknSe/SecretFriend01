@@ -24,6 +24,7 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
     private ArrayList<Game> gameInGroup = new ArrayList<Game>();
     private String s;
     private int c=0;
+    private double x;
     private boolean f = true, fl = true;
 
     @Override
@@ -31,6 +32,7 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
         super.onCreate(savedInstanceState);
         binding = ActivitySeePlayersBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        System.out.println(x);
         Game game = (Game) getIntent().getSerializableExtra("game");
         Disposable disposable = DBClient.getInstance(getApplicationContext()).getAppDatabase()
                 .gameDao().getAll().observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<Game>>() {
@@ -41,7 +43,7 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
                                 gameInGroup.add(games.get(i));
                             }
                         }
-                        binding.textGroupName.setText("\n\n"+"start"+"\n\n");
+                        binding.textGroupName.setText("начать");
                     }
                 });
         binding.deleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +57,10 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
         binding.textGroupName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowPlayers();
+                if(fl){
+                    if (c!=0) fl = false;
+                    ShowPlayers();
+                }
             }
         });
         binding.closeBtn2.setOnClickListener(new View.OnClickListener() {
@@ -64,26 +69,56 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
                 finish();
             }
         });
-        
+        binding.getRoot().setTransitionListener(new MotionLayout.TransitionListener() {
+            @Override
+            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+
+            }
+
+            @Override
+            public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+
+            }
+
+            @Override
+            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                if (currentId == R.id.offScreenLike) {
+                    fl = true;
+                    motionLayout.setProgress(0f);
+                    motionLayout.setTransition(R.id.rest,R.id.like);
+                    binding.textGroupName.setText(gameInGroup.get(c).getPlayer1());
+                }
+            }
+
+            @Override
+            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+            }
+        });
     }
 
     private void ShowPlayers(){
-        if (f) {
-            if (c>=gameInGroup.size()){
-                finish();
-                c=0;
+            if (f) {
+                if (c >= gameInGroup.size()) {
+                    finish();
+                    c = 0;
+                } else {
+                    if (c != 0) {
+                        binding.textGroupName2.setVisibility(View.VISIBLE);
+                        binding.textGroupName2.setText(gameInGroup.get(c).getPlayer1());
+                        binding.getRoot().transitionToState(R.id.like);
+                        binding.textGroupName2.setVisibility(View.INVISIBLE);
+                    } else {
+                        binding.textGroupName.setText(gameInGroup.get(c).getPlayer1());
+                    }
+                    f = false;
+                }
+            } else {
+                new FlipAnimation(SeePlayers.this, binding.textGroupName, f, gameInGroup.get(c).getPlayer1(), gameInGroup.get(c).getPlayer2());
+                c++;
+                f = true;
+                fl = true;
             }
-            else {
-                //new FlipAnimation(SeePlayers.this,binding.textGroupName,f,gameInGroup.get(c).getPlayer1(),gameInGroup.get(c).getPlayer2());
-                binding.textGroupName.setText(gameInGroup.get(c).getPlayer1());
-                f = false;
-            }
-        }
-        else{
-            new FlipAnimation(SeePlayers.this,binding.textGroupName,f,gameInGroup.get(c).getPlayer1(),gameInGroup.get(c).getPlayer2());
-            c++;
-            f = true;
-        }
     }
 
     private void deleteGame(final Game game) {
@@ -115,4 +150,5 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
     public void flipEnd(TextView txt) {
 
     }
+
 }
