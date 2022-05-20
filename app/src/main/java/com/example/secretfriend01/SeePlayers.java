@@ -135,7 +135,7 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "удалено", Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(new Intent(SeePlayers.this, MainActivity.class));
             }

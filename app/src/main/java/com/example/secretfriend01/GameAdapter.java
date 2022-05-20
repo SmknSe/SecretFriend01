@@ -50,6 +50,8 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         if (!gameSet.contains(game.getGameName())){
             gameSet.add(game.getGameName());
             holder.textViewGameName.setText(game.getGameName());
+            String nm = game.getGameName();
+            holder.playersNum.setText(" Количество игроков: "+get_players_num(game.getGameName())*2);
         }
     }
 
@@ -64,11 +66,12 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
 
     class GameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textViewGameName;
-
+        TextView playersNum;
         public GameViewHolder(View itemView){
             super(itemView);
 
             textViewGameName = itemView.findViewById(R.id.textViewGameName);
+            playersNum = itemView.findViewById(R.id.playersNum);
 
             itemView.setOnClickListener(this);
         }
@@ -80,5 +83,13 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             intent.putExtra("game",game);
             mCtx.startActivity(intent);
         }
+    }
+
+    public int get_players_num(String name){
+        int c = 0;
+        for(int i=0;i< gameList.size();i++){
+            if (gameList.get(i).getGameName().equals(name)) c++;
+        }
+        return c;
     }
 }
