@@ -20,6 +20,8 @@ public class AddGame extends AppCompatActivity {
     public String groupName;
     public Integer groupCount;
     private ArrayList<String> players = new ArrayList<String>();
+    private ArrayList<String> players2 = new ArrayList<String>();
+    private ArrayList<String> paired_players = new ArrayList<String>();
     private ArrayList<String> games_names = new ArrayList<>();
     private HashMap<String,String> pool = new HashMap<String,String>();
     private int i=0,j=0;
@@ -31,7 +33,6 @@ public class AddGame extends AppCompatActivity {
         setContentView(binding.getRoot());
         Bundle b = this.getIntent().getBundleExtra("bundle");
         games_names = b.getStringArrayList("names");
-        System.out.println(games_names);
         binding.closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +97,9 @@ public class AddGame extends AppCompatActivity {
                 else{
                     binding.groupNameTxt.setError("Необходимо заполнить!");
                 }
-                if ((groupCount/2-i)==0) updateFragment3();
+                if ((groupCount/2-i)==0){
+                    updateFragment3();
+                }
             }
         });
     }
@@ -114,16 +117,13 @@ public class AddGame extends AppCompatActivity {
             public void onClick(View v) {
                 String s = binding.groupNameTxt.getText().toString();
                 if (!(s.equals(""))){
-                    int r = (int) (Math.random() * players.size());
-                    pool.put(players.get(r),s);
-                    players.remove(r);
+                    players2.add(s);
                     j++;
                     updateFragment3();
                 }
                 else{
                     binding.groupNameTxt.setError("Необходимо заполнить!");
                 }
-                System.out.println(pool);
             }
         });
     }
@@ -134,11 +134,24 @@ public class AddGame extends AppCompatActivity {
             protected Void doInBackground(Void... voids) {
                 Game game = new Game();
                 game.setGameName(groupName);
-                for (Map.Entry<String,String> entry:pool.entrySet()) {
-                    game.setPlayer1(entry.getKey());
-                    game.setPlayer2(entry.getValue());
-
+                int r;
+                for(int i=0;i<players.size();i++){
+                    do {
+                        r = (int) (Math.random() * players2.size());
+                    }while (paired_players.contains(players2.get(r)));
+                    game.setPlayer1(players.get(i));
+                    game.setPlayer2(players2.get(r));
                     DBClient.getInstance(getApplicationContext()).getAppDatabase().gameDao().insert(game);
+                    paired_players.add(players2.get(r));
+                }
+                for(int i=0;i<players2.size();i++){
+                    do {
+                        r = (int) (Math.random() * players.size());
+                    }while (paired_players.contains(players.get(r)));
+                    game.setPlayer1(players2.get(i));
+                    game.setPlayer2(players.get(r));
+                    DBClient.getInstance(getApplicationContext()).getAppDatabase().gameDao().insert(game);
+                    paired_players.add(players.get(r));
                 }
                 return null;
             }

@@ -51,7 +51,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             gameSet.add(game.getGameName());
             holder.textViewGameName.setText(game.getGameName());
             String nm = game.getGameName();
-            holder.playersNum.setText(" Количество игроков: "+get_players_num(game.getGameName())*2);
+            holder.playersNum.setText(" Количество игроков: "+get_players_num(game.getGameName()));
         }
     }
 
