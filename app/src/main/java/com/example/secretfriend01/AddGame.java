@@ -93,6 +93,9 @@ public class AddGame extends AppCompatActivity {
                     i++;
                     updateFragment2();
                 }
+                else{
+                    binding.groupNameTxt.setError("Необходимо заполнить!");
+                }
                 if ((groupCount/2-i)==0) updateFragment3();
             }
         });
@@ -116,6 +119,9 @@ public class AddGame extends AppCompatActivity {
                     players.remove(r);
                     j++;
                     updateFragment3();
+                }
+                else{
+                    binding.groupNameTxt.setError("Необходимо заполнить!");
                 }
                 System.out.println(pool);
             }
