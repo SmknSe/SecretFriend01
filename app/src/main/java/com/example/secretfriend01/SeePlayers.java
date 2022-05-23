@@ -52,6 +52,7 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
                 for (Game g : gameInGroup){
                     deleteGame(g);
                 }
+                Toast.makeText(getApplicationContext(), "удалено", Toast.LENGTH_LONG).show();
             }
         });
         binding.textGroupName.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +136,6 @@ public class SeePlayers extends AppCompatActivity implements FlipAnimation.FlipE
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                Toast.makeText(getApplicationContext(), "удалено", Toast.LENGTH_LONG).show();
                 finish();
                 startActivity(new Intent(SeePlayers.this, MainActivity.class));
             }
