@@ -105,7 +105,7 @@ public class AddGame extends AppCompatActivity {
     }
 
     private void updateFragment3() {
-        if (groupCount-i-j==0){
+        if (groupCount-i-j<=0){
             saveGame();
         }
         binding.label.setText("Введите вторую половину игроков:(еще "+ (groupCount-i-j)+")");
